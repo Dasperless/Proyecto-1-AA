@@ -44,46 +44,6 @@ def bruteForceSolution(cardsList, solution):
 					res = [sospechoso,arma,motivo,lugar]
 					# print(res)
 					if(res == solution):
-<<<<<<< Updated upstream
-						return res					
-
-	"""Retorna una lista de restricciones.
-
-        Args:
-                n: Cantidad de restricciones
-                sol: Solucion del juego
-
-        Returns:
-                list: Lista de restricciones
-        """
-def setRestrictions(n,sol):
-        restricciones = []
-        categorias = ['Sospechosos','Arma','Motivo','Lugar']
-        contador1=0
-        while(contador1<n):
-                restriccion=[]
-                contador2=0
-                categoria1=0
-                categoria2=0
-                while(contador2<2):
-                        numRandom = random.randint(0,3)
-                        size = len(cards[categorias[numRandom]])
-                        cartaActual = cards[categorias[numRandom]][randomIndex(size)]
-                        if(contador2==0):
-                                categoria1=numRandom
-                                restriccion+=[cartaActual]
-                                contador2+=1
-                        else:
-                                categoria2=numRandom
-                                if(cartaActual!=restriccion[0]):    
-                                        restriccion+=[cartaActual]
-                                        contador2+=1
-                prueba = [sol[categoria1],sol[categoria2]]
-                if(restriccion!=prueba):
-                        restricciones+=[restriccion]
-                        contador1+=1
-        return restricciones
-=======
 						return res
 					
 def setRestrictions(n):
@@ -123,4 +83,3 @@ def setRestrictions(n):
 			n-=1                                     
 global answer
 answer = setAnswer(cards)
->>>>>>> Stashed changes
