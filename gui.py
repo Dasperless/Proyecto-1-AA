@@ -10,9 +10,11 @@ class Application(tk.Frame):
 	bfArray = []
 	output = None
 	timeLabels = []
-	def __init__(self, master=None):
+	mainInst = None
+	def __init__(self, main, master=None):
 		super().__init__(master)
 		self.master = master
+		self.mainInst = main
 		self.master.resizable(0,0)
 		self.grid()
 		self.showBrutalForceSolution()
@@ -20,14 +22,22 @@ class Application(tk.Frame):
 		self.testControls()
 
 	def showAnswer(self, answer):
-		tk.Label(self, text="Solución").grid(row=0, column=0, columnspan=4)\
+		tk.Label(self, text="Solución").grid(row=0, column=0, columnspan=4)
 
-		keys = list(cards.keys())
+		keys = list(self.mainInst.cards.keys())
 		for i in range(len(keys)):
 			tk.Label(self, text=keys[i], borderwidth=1).grid(row=1, column=i)
 
 		for i in range(len(answer)):
 			tk.Button(self, text=answer[i], borderwidth=1, height=5, width=20).grid(row=2, column=i, padx=5)
+
+	def showRestrictions(self, restrictions):
+		tk.Label(self, text = "Restricciones").grid(row=0, column=4)
+		restictionList = tkscrolled.ScrolledText(self, width=20, state="disable").grid(row=1, column=4, rowspan=6)
+		print(restrictions)
+		for i in restrictions:
+			print(i)
+			# restrictions.insert(tk.INSERT,i)
 
 	def showBrutalForceSolution(self):
 		tk.Label(self, text="Solución (Algoritmo fuerza bruta)").grid(
@@ -78,10 +88,13 @@ class Application(tk.Frame):
 		except:
 			messagebox.showerror(message= "La entrada no es válida")		
 			
-		for i in range(numRep):
-			answer  = setAnswer(cards)
-			self.showAnswer(answer)
-			setRestrictions(numRest)
-			bruteForceSolution(cards,answer)
+		# for i in range(numRep):
+		self.mainInst.setAnswer()
+		answer = self.mainInst.answer
+		restrictions = self.mainInst.restrictions
+		self.showAnswer(answer)
+		self.showRestrictions(restrictions)
+			# setRestrictions(numRest)
+			# bruteForceSolution(cards,answer)
 		# bruteForceSolution(cards, answer)
 
