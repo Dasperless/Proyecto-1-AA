@@ -1,5 +1,9 @@
 import random
-global cards
+from types import new_class
+from gui import Application	
+
+Class 
+
 cards = { 'Sospechosos': ['El/la mejor amigo(a)', 'El/la novio(a)', 'El/la vecino(a)', 'El mensajero', 'El extraño', 'El/la hermanastro(a)', 'El/la colega de trabajo'],
 		  'Arma': ['Pistola', 'Cuchillo', 'Machete', 'Pala', 'Bate', 'Botella', 'Tubo','Cuerda'],
 		  'Motivo': ['Venganza', 'Celos', 'Dinero', 'Accidente', 'Drogas', 'Robo'],
@@ -42,13 +46,13 @@ def bruteForceSolution(cardsList, solution):
 					motivo = cardsList[keys[2]][k]
 					lugar =cardsList[keys[3]][l]
 					res = [sospechoso,arma,motivo,lugar]
-					# print(res)
+					print(app.bfArray[0])
 					if(res == solution):
 						return res
 					
 def setRestrictions(n):
 	restricciones = []
-	answer = setAnswer()
+	answer = setAnswer(cards)
 	categorias = ['Sospechosos','Arma','Motivo','Lugar']
 	
 	#Contador que indica el numero de parejas de restricciones
@@ -81,5 +85,5 @@ def setRestrictions(n):
 			restricciones += [restriccion]
 		else:
 			n-=1                                     
-global answer
-answer = setAnswer(cards)
+# global answer
+# answer = setAnswer(cards)
