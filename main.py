@@ -1,4 +1,5 @@
 import random
+import time
 import tkinter as tk
 from gui import Application
 
@@ -10,7 +11,11 @@ class Main:
 			}
 	answer = []
 	restrictions = []
-	bfOutput = ""
+	bfCombinations = []
+	btCombinations = []
+	bfTimeArr = []
+	btTimeArr = []
+
 	def __init__(self, numRest):
 		self.setAnswer()
 		self.setRestrictions(numRest)
@@ -18,6 +23,34 @@ class Main:
 		root = tk.Tk()
 		self.app = Application(self, master=root)
 		self.app.mainloop()
+
+	def startTest(self, numRest, numRep):
+		self.bfTimeArr = []
+		self.btTimeArr = []
+
+		for i in range(numRep):
+			self.setAnswer()					#setea la respuesta
+			answer = self.answer				#lista con la respuesta	
+			self.setRestrictions(numRest)		#numero de restricciones
+			restrictions = self.restrictions	#obtiene la restricciones
+			self.app.showAnswer(answer)						#Actualiza las respuestas en la interfaz
+			self.app.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
+
+			startTime = time.time()
+			self.bruteForceSolution()
+			finalTime = time.time() - startTime
+			self.bfTimeArr += [finalTime]
+
+		averge = self.average(self.bfTimeArr)
+		self.app.setBfTime(averge)	
+		self.createOutput()
+
+	def average(self, arr):
+		total = len(arr)
+		sum = 0
+		for i in arr:
+			sum += i
+		return sum/total
 
 	def randomIndex(self, size):
 		return random.randint(0, size-1)
@@ -31,7 +64,8 @@ class Main:
 
 	def bruteForceSolution(self):
 		keys = list(self.cards.keys())
-		self.bfOutput = "################ Algoritmo de fuerza bruta ################\n"
+		self.bfCombinations = []
+
 		for i in range(len(self.cards[keys[0]])):
 			res = []
 			for j in range(len(self.cards[keys[1]])):
@@ -42,13 +76,20 @@ class Main:
 						motivo = self.cards[keys[2]][k]
 						lugar = self.cards[keys[3]][l]
 						res = [sospechoso, arma, motivo, lugar]
-						self.app.bfArray[0]['text']  = sospechoso
-						self.app.bfArray[1]['text']  = arma
-						self.app.bfArray[2]['text']  = motivo
-						self.app.bfArray[3]['text']  = lugar
-						self.bfOutput += str(res) + "\n"
+						self.app.updateBfAnswer(res)
+						self.bfCombinations += [res]
+
 						if(res == self.answer):
 							return res
+
+	def createOutput(self):
+		outputStr = "############## Algoritmo de Fuerza bruta ##############\n"
+		outputStr += "Cantidad de combinaciones: " + str(len(self.bfCombinations)) + "\n"
+		# for i in self.bfCombinations:
+		# 	outputStr += str(i) + "\n"
+		
+		outputStr += str(self.bfTimeArr)
+		self.app.updateOutput(outputStr)
 
 	def setRestrictions(self,n):
 			self.restrictions= []
@@ -86,4 +127,3 @@ class Main:
 							n-=1    
 		
 main = Main(1)
-print(main.bruteForceSolution())

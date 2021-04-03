@@ -1,8 +1,6 @@
 import tkinter as tk
 import tkinter.scrolledtext as tkscrolled
-import time
 from tkinter import messagebox
-
 from tkinter import ttk
 # from main import *
 
@@ -12,8 +10,7 @@ class Application(tk.Frame):
 	output = None
 	timeLabels = []
 	mainInst = None
-	bfTime = None
-	btTime = None
+
 	def __init__(self, main, master=None):
 		super().__init__(master)
 		self.master = master
@@ -36,7 +33,7 @@ class Application(tk.Frame):
 
 	def showRestrictions(self, restrictions):
 		tk.Label(self, text = "Restricciones").grid(row=0, column=4)
-		restictionList = tkscrolled.ScrolledText(self,height=36, width=40)
+		restictionList = tkscrolled.ScrolledText(self, height=36, width=40)
 		restictionList.grid(row=1, column=4, rowspan=10)
 		print(restrictions)
 		for i in range(len(restrictions)):
@@ -84,10 +81,27 @@ class Application(tk.Frame):
 		self.btTime.grid(row=8, column=3)
 
 		#Output con los pasos del algoritmo
-		self.output = tkscrolled.ScrolledText(self, height=5, state="disable")
+		self.output = tkscrolled.ScrolledText(self, height=10, state="disable")
 		self.output.grid(row=10, column=0, columnspan=4)
 		tk.Button(self, text="Iniciar", height=2, width=10, command= lambda:self.startTest(numRest.get(), numRep.get())).grid(row=11, column=0, columnspan=4)
 
+	def setBfTime(self, time):
+		self.bfTime['text'] = time
+
+	def setBtTime(self, time):
+		self.btTime['text'] = time
+
+	def updateBfAnswer(self, arr):
+		self.bfArray[0]['text']  = arr[0]
+		self.bfArray[1]['text']  = arr[1]
+		self.bfArray[2]['text']  = arr[2]
+		self.bfArray[3]['text']  = arr[3]
+
+	def updateOutput(self, str):
+		self.output.config(state=tk.NORMAL)
+		self.output.delete(1.0,tk.END)
+		self.output.insert(tk.INSERT, str)
+		self.output.config(state=tk.DISABLED)
 
 	def startTest(self, numRest, numRep):
 		if(numRest == ""):
@@ -99,17 +113,7 @@ class Application(tk.Frame):
 			numRep = int(numRep)
 		except:
 			messagebox.showerror(message= "La entrada no es válida")		
-			
-		# for i in range(numRep):
-		self.mainInst.setAnswer()					#setea la respuesta
-		answer = self.mainInst.answer				#lista con la respuesta	
-		self.mainInst.setRestrictions(numRest)		#numero de restricciones
-		restrictions = self.mainInst.restrictions	#obtiene la restricciones
-		self.showAnswer(answer)						#Actualiza las respuestas en la interfaz
-		self.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
 
-		self.mainInst.bruteForceSolution()
-			# setRestrictions(numRest)
-			# bruteForceSolution(cards,answer)
-		# bruteForceSolution(cards, answer)
+		self.mainInst.startTest(numRest,numRep)
+			
 
