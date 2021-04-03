@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import messagebox
 import tkinter.scrolledtext as tkscrolled
+import time
+from tkinter import messagebox
 
 from tkinter import ttk
 # from main import *
@@ -11,6 +12,8 @@ class Application(tk.Frame):
 	output = None
 	timeLabels = []
 	mainInst = None
+	bfTime = None
+	btTime = None
 	def __init__(self, main, master=None):
 		super().__init__(master)
 		self.master = master
@@ -33,11 +36,12 @@ class Application(tk.Frame):
 
 	def showRestrictions(self, restrictions):
 		tk.Label(self, text = "Restricciones").grid(row=0, column=4)
-		restictionList = tkscrolled.ScrolledText(self, width=20, state="disable").grid(row=1, column=4, rowspan=6)
+		restictionList = tkscrolled.ScrolledText(self,height=36, width=40)
+		restictionList.grid(row=1, column=4, rowspan=10)
 		print(restrictions)
-		for i in restrictions:
-			print(i)
-			# restrictions.insert(tk.INSERT,i)
+		for i in range(len(restrictions)):
+			restictionList.insert(tk.INSERT,str(restrictions[i]) + "\n")
+		restictionList.config(state=tk.DISABLED)
 
 	def showBrutalForceSolution(self):
 		tk.Label(self, text="Solución (Algoritmo fuerza bruta)").grid(
@@ -62,21 +66,29 @@ class Application(tk.Frame):
 			bfArray[i].grid(row=6, column=i, padx=5)
 
 	def testControls(self):
+		#Entry con las restricciones
 		tk.Label(self, text="Restricciones").grid(row=7, column=0, pady=15)
 		numRest = ttk.Entry(self)
 		numRest.grid(row=7, column=1)
 		tk.Label(self, text="Repeticiones").grid(row=8, column=0, pady=15)
 		numRep = ttk.Entry(self)
 		numRep.grid(row=8, column=1)
+
+		#Tiempo de los algoritmos
 		tk.Label(self, text="Backtracking (ms)").grid(row=7, column=2)
 		tk.Label(self, text="Algoritmo Fuerza Bruta (ms)").grid(row=8, column=2)
-		tk.Label(self, text="0").grid(row=7, column=3)
-		tk.Label(self, text="0").grid(row=8, column=3)
 
+		self.bfTime = tk.Label(self, text="0")
+		self.bfTime.grid(row=7, column=3)
+		self.btTime = tk.Label(self, text="0")
+		self.btTime.grid(row=8, column=3)
+
+		#Output con los pasos del algoritmo
 		self.output = tkscrolled.ScrolledText(self, height=5, state="disable")
 		self.output.grid(row=10, column=0, columnspan=4)
 		tk.Button(self, text="Iniciar", height=2, width=10, command= lambda:self.startTest(numRest.get(), numRep.get())).grid(row=11, column=0, columnspan=4)
-		
+
+
 	def startTest(self, numRest, numRep):
 		if(numRest == ""):
 			return messagebox.showinfo(message="No se ha ingresado el número de restricciones")
@@ -89,11 +101,14 @@ class Application(tk.Frame):
 			messagebox.showerror(message= "La entrada no es válida")		
 			
 		# for i in range(numRep):
-		self.mainInst.setAnswer()
-		answer = self.mainInst.answer
-		restrictions = self.mainInst.restrictions
-		self.showAnswer(answer)
-		self.showRestrictions(restrictions)
+		self.mainInst.setAnswer()					#setea la respuesta
+		answer = self.mainInst.answer				#lista con la respuesta	
+		self.mainInst.setRestrictions(numRest)		#numero de restricciones
+		restrictions = self.mainInst.restrictions	#obtiene la restricciones
+		self.showAnswer(answer)						#Actualiza las respuestas en la interfaz
+		self.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
+
+		self.mainInst.bruteForceSolution()
 			# setRestrictions(numRest)
 			# bruteForceSolution(cards,answer)
 		# bruteForceSolution(cards, answer)
