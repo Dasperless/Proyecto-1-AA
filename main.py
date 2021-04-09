@@ -41,8 +41,15 @@ class Main:
 			finalTime = time.time() - startTime
 			self.bfTimeArr += [finalTime]
 
+			startTime = time.time()
+			self.backrackingSolution(['','','',''],0)
+			finalTime = time.time() - startTime
+			self.btTimeArr += [finalTime]
+
 		averge = self.average(self.bfTimeArr)
-		self.app.setBfTime(averge)	
+		btaverage = self.average(self.btTimeArr)
+		self.app.setBfTime(averge)
+		self.app.setBtTime(btaverage)	
 		self.createOutput()
 
 	def average(self, arr):
@@ -87,7 +94,6 @@ class Main:
 		outputStr += "Cantidad de combinaciones: " + str(len(self.bfCombinations)) + "\n"
 		# for i in self.bfCombinations:
 		# 	outputStr += str(i) + "\n"
-		
 		outputStr += str(self.bfTimeArr)
 		self.app.updateOutput(outputStr)
 
@@ -124,6 +130,38 @@ class Main:
 					if(restriccion != prueba):
 							self.restrictions += [restriccion]
 					else:
-							n-=1    
+							n-=1
+	"""
+	Comprueba en el array actual si existe alguna restriccion
+	Input: Array con Restricciones
+	Return: False: Si existe la restriccion
+				True: Si no existe la restriccion
+	"""					   						 
+	def comprobarRes(self,array):
 		
+		for restriccion in self.restrictions:
+			contador = 0
+			for objeto in restriccion:
+				if(objeto in array):
+					contador +=1
+			if(contador >=2):
+				return False
+		return True
+		
+	"""
+	Busca la solucion al problema de cartas de manera recursiva y acorta camino con restricciones
+	Input: Array en el cual se añade la solucion
+	Return: Array con la solucion
+	"""
+	def backrackingSolution(self,array,n):
+		if(n==4):
+			self.btCombinations += array
+			if(array == self.answer):
+				return array
+		else:
+			keys = ['Sospechosos','Arma','Motivo','Lugar']
+			for c in range(len(self.cards[keys[n]])):
+				array[n]=self.cards[keys[n]][c]
+				if(self.comprobarRes(array)):
+					self.backrackingSolution(array,n+1)
 main = Main(1)
