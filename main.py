@@ -15,6 +15,7 @@ class Main:
 	btCombinations = []
 	bfTimeArr = []
 	btTimeArr = []
+	bfAnswer = []
 
 	def __init__(self, numRest):
 		self.setAnswer()
@@ -36,21 +37,31 @@ class Main:
 			self.app.showAnswer(answer)						#Actualiza las respuestas en la interfaz
 			self.app.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
 
+			#Se toma el tiempo del algoritmo de fuerza bruta.
 			startTime = time.time()
-			self.bruteForceSolution()
+			bruteForce = self.bruteForceSolution()
 			finalTime = time.time() - startTime
 			self.bfTimeArr += [finalTime]
 
+			#Se toma el tiempo del algoritmo de backtracking.
 			startTime = time.time()
-			self.backrackingSolution(['','','',''],0)
+			backtracking = self.backrackingSolution(['','','',''],0)
 			finalTime = time.time() - startTime
 			self.btTimeArr += [finalTime]
 
+		#promedios
 		averge = self.average(self.bfTimeArr)
 		btaverage = self.average(self.btTimeArr)
+
+		#actualiza el label de la respuesta.
+		self.app.updateBfAnswer(bruteForce)
+		self.app.updateBtAnswer(self.bfAnswer)
+
+		#actualiza los promedios en interfaz 
 		self.app.setBfTime(averge)
 		self.app.setBtTime(btaverage)	
-		self.createOutput()
+
+		self.createOutput() #Crea el output.
 
 	def average(self, arr):
 		total = len(arr)
@@ -83,19 +94,20 @@ class Main:
 						motivo = self.cards[keys[2]][k]
 						lugar = self.cards[keys[3]][l]
 						res = [sospechoso, arma, motivo, lugar]
-						self.app.updateBfAnswer(res)
-						self.bfCombinations += [res]
-
+						self.bfCombinations+=res
 						if(res == self.answer):
 							return res
 
 	def createOutput(self):
 		outputStr = "############## Algoritmo de Fuerza bruta ##############\n"
 		outputStr += "Cantidad de combinaciones: " + str(len(self.bfCombinations)) + "\n"
-		# for i in self.bfCombinations:
-		# 	outputStr += str(i) + "\n"
-		outputStr += str(self.bfTimeArr)
-		self.app.updateOutput(outputStr)
+		outputStr += str(self.bfTimeArr) + "\n\n"
+
+		outputStr += "############## Algoritmo de backtracking ##############\n"
+		outputStr += "Cantidad de combinaciones: " + str(len(self.btCombinations)) + "\n"
+		outputStr += str(self.btTimeArr) + "\n\n"
+
+		self.app.updateOutput(outputStr) 
 
 	def setRestrictions(self,n):
 			self.restrictions= []
@@ -155,9 +167,10 @@ class Main:
 	"""
 	def backrackingSolution(self,array,n):
 		if(n==4):
-			self.btCombinations += array
 			if(array == self.answer):
-				return array
+				self.btCombinations += array
+				print(array)
+				self.bfAnswer = array
 		else:
 			keys = ['Sospechosos','Arma','Motivo','Lugar']
 			for c in range(len(self.cards[keys[n]])):

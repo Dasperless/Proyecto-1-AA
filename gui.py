@@ -7,6 +7,7 @@ from tkinter import ttk
 
 class Application(tk.Frame):
 	bfArray = []
+	btArray = []
 	output = None
 	timeLabels = []
 	mainInst = None
@@ -35,7 +36,6 @@ class Application(tk.Frame):
 		tk.Label(self, text = "Restricciones").grid(row=0, column=4)
 		restictionList = tkscrolled.ScrolledText(self, height=36, width=40)
 		restictionList.grid(row=1, column=4, rowspan=10)
-		print(restrictions)
 		for i in range(len(restrictions)):
 			restictionList.insert(tk.INSERT,str(restrictions[i]) + "\n")
 		restictionList.config(state=tk.DISABLED)
@@ -43,6 +43,7 @@ class Application(tk.Frame):
 	def showBrutalForceSolution(self):
 		tk.Label(self, text="Solución (Algoritmo fuerza bruta)").grid(
 			row=3, column=0, columnspan=4, pady=20)
+
 		for i in range(4):
 			btn = tk.Button(self, borderwidth=1, height=5, width=20)
 			self.bfArray += [btn]
@@ -53,14 +54,13 @@ class Application(tk.Frame):
 	def showBacktrackinSolution(self):
 		tk.Label(self, text="Solución (Backtracking)").grid(
 			row=5, column=0, columnspan=4, pady=20)
-		global bfArray
-		bfArray = []
+
 		for i in range(4):
 			btn = tk.Button(self, borderwidth=1, height=5, width=20)
-			bfArray += [btn]
+			self.btArray += [btn]
 
-		for i in range(len(bfArray)):
-			bfArray[i].grid(row=6, column=i, padx=5)
+		for i in range(len(self.btArray)):
+			self.btArray[i].grid(row=6, column=i, padx=5)
 
 	def testControls(self):
 		#Entry con las restricciones
@@ -72,8 +72,8 @@ class Application(tk.Frame):
 		numRep.grid(row=8, column=1)
 
 		#Tiempo de los algoritmos
-		tk.Label(self, text="Backtracking (ms)").grid(row=7, column=2)
-		tk.Label(self, text="Algoritmo Fuerza Bruta (ms)").grid(row=8, column=2)
+		tk.Label(self, text="Algoritmo Fuerza Bruta (ms)").grid(row=7, column=2)
+		tk.Label(self, text="Backtracking (ms) ").grid(row=8, column=2)
 
 		self.bfTime = tk.Label(self, text="0")
 		self.bfTime.grid(row=7, column=3)
@@ -97,6 +97,12 @@ class Application(tk.Frame):
 		self.bfArray[2]['text']  = arr[2]
 		self.bfArray[3]['text']  = arr[3]
 
+	def updateBtAnswer(self, arr):
+		self.btArray[0]['text']  = arr[0]
+		self.btArray[1]['text']  = arr[1]
+		self.btArray[2]['text']  = arr[2]
+		self.btArray[3]['text']  = arr[3]
+		
 	def updateOutput(self, str):
 		self.output.config(state=tk.NORMAL)
 		self.output.delete(1.0,tk.END)
