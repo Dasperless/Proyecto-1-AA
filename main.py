@@ -1,5 +1,5 @@
 import random
-from timeit import default_timer as timer
+import time
 import tkinter as tk
 from tkinter.constants import NONE
 from gui import Application
@@ -39,15 +39,15 @@ class Main:
 			self.app.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
 
 			#Se toma el tiempo del algoritmo de fuerza bruta.
-			startTimeBf = timer()
+			startTimeBf = time.time_ns()
 			bruteForce = self.bruteForceSolution()
-			finalTimeBf = timer() - startTimeBf
+			finalTimeBf = time.time_ns() - startTimeBf
 			self.bfTimeArr += [finalTimeBf]
 
 			#Se toma el tiempo del algoritmo de backtracking.
-			startTimeBt = timer()
+			startTimeBt = time.time_ns()
 			backtracking = self.backtrackingSolution(['','','','',''],0)
-			finalTimeBt = timer() - startTimeBt
+			finalTimeBt = time.time_ns() - startTimeBt
 			self.btTimeArr += [finalTimeBt]
 
 		#promedios
@@ -160,14 +160,13 @@ class Main:
 	Return: Array con la solucion
 	"""
 	def backtrackingSolution(self,array,n):
-		a = self.answer
-		if(n == 5):
+		if(n == 5):						
 			if(array == self.answer):
 				return array
 		else:
 			keys = list(self.cards.keys())
-			for c in range(len(self.cards[keys[n]])):	#Recorre las cartas
-				array[n]=self.cards[keys[n]][c]				#Selecciona en la posicion n la carta.
+			for c in range(len(self.cards[keys[n]])):				#Recorre las cartas
+				array[n]=self.cards[keys[n]][c]						#Selecciona en la posicion n la carta.
 				if(self.comprobarRes(array)):
 					result = self.backtrackingSolution(array,n+1)
 					if(result is not None):

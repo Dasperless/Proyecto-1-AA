@@ -72,8 +72,8 @@ class Application(tk.Frame):
 		numRep.grid(row=8, column=1)
 
 		#Tiempo de los algoritmos
-		tk.Label(self, text="Algoritmo Fuerza Bruta (ms)").grid(row=7, column=2)
-		tk.Label(self, text="Backtracking (ms) ").grid(row=8, column=2)
+		tk.Label(self, text="Algoritmo Fuerza Bruta (ns)").grid(row=7, column=2)
+		tk.Label(self, text="Backtracking (ns) ").grid(row=8, column=2)
 
 		self.bfTime = tk.Label(self, text="0")
 		self.bfTime.grid(row=7, column=3)
