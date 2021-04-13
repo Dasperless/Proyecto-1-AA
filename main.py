@@ -101,11 +101,12 @@ class Main:
 
 	def createOutput(self):
 		outputStr = "############## Algoritmo de Fuerza bruta ##############\n"
-		outputStr += str(self.bfTimeArr) + "\n\n"
+		outputStr += str(self.bfTimeArr) + "\n"
+		outputStr += "Promedio: " + str(self.average(self.bfTimeArr)) +"\n\n"
 
 		outputStr += "############## Algoritmo de backtracking ##############\n"
-		outputStr += str(self.btTimeArr) + "\n\n"
-
+		outputStr += str(self.btTimeArr) + "\n" +  str(self.average(self.btTimeArr)) + "\n"
+		outputStr += "Promedio: " + str(self.average(self.btTimeArr)) +"\n\n"
 		self.app.updateOutput(outputStr) 
 
 	def setRestrictions(self,n):
