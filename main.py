@@ -1,12 +1,14 @@
 import random
 from timeit import default_timer as timer
 import tkinter as tk
+from tkinter.constants import NONE
 from gui import Application
 
 class Main:
 	cards = {'Sospechosos': ['El/la mejor amigo(a)', 'El/la novio(a)', 'El/la vecino(a)', 'El mensajero', 'El extraño', 'El/la hermanastro(a)', 'El/la colega de trabajo'],
 					'Arma': ['Pistola', 'Cuchillo', 'Machete', 'Pala', 'Bate', 'Botella', 'Tubo', 'Cuerda'],
 					'Motivo': ['Venganza', 'Celos', 'Dinero', 'Accidente', 'Drogas', 'Robo'],
+					'Parte': ['Cabeza','Pecho', 'Abdomen', 'Espalda', 'Piernas', 'Brazos'],
 					'Lugar': ['Sala', 'Comedor', 'Baño', 'Terraza', 'Cuarto', 'Garage', 'Patio', 'Balcón', 'Cocina']
 			}
 	answer = []
@@ -44,7 +46,7 @@ class Main:
 
 			#Se toma el tiempo del algoritmo de backtracking.
 			startTimeBt = timer()
-			backtracking = self.backrackingSolution(['','','',''],0)
+			backtracking = self.backtrackingSolution(['','','','',''],0)
 			finalTimeBt = timer() - startTimeBt
 			self.btTimeArr += [finalTimeBt]
 
@@ -87,13 +89,15 @@ class Main:
 			for j in range(len(self.cards[keys[1]])):
 				for k in range(len(self.cards[keys[2]])):
 					for l in range(len(self.cards[keys[3]])):
-						sospechoso = self.cards[keys[0]][i]
-						arma = self.cards[keys[1]][j]
-						motivo = self.cards[keys[2]][k]
-						lugar = self.cards[keys[3]][l]
-						res = [sospechoso, arma, motivo, lugar]	
-						if(res == self.answer):
-							return res
+						for m in range(len(self.cards[keys[4]])):
+							sospechoso = self.cards[keys[0]][i]
+							arma = self.cards[keys[1]][j]
+							motivo = self.cards[keys[2]][k]
+							parte = self.cards[keys[3]][l]
+							lugar = self.cards[keys[4]][m]
+							res = [sospechoso, arma, motivo, parte, lugar]	
+							if(res == self.answer):
+								return res
 
 	def createOutput(self):
 		outputStr = "############## Algoritmo de Fuerza bruta ##############\n"
@@ -106,7 +110,7 @@ class Main:
 
 	def setRestrictions(self,n):
 			self.restrictions= []
-			categorias = ['Sospechosos','Arma','Motivo','Lugar']
+			categorias = ['Sospechosos','Arma','Motivo','Parte','Lugar']
 			
 			#Contador que indica el numero de parejas de restricciones
 			for contador1 in range(n):
@@ -118,7 +122,7 @@ class Main:
 
 					#Ciclo para obtener el numero de restricciones
 					while(i<2):
-							numRandom = random.randint(0,3)
+							numRandom = random.randint(0,4)
 							size = len(self.cards[categorias[numRandom]])
 							cartaActual = self.cards[categorias[numRandom]][self.randomIndex(size)]
 							
@@ -145,13 +149,8 @@ class Main:
 				True: Si no existe la restriccion
 	"""					   						 
 	def comprobarRes(self,array):
-		
 		for restriccion in self.restrictions:
-			contador = 0
-			for objeto in restriccion:
-				if(objeto in array):
-					contador +=1
-			if(contador >=2):
+			if(restriccion[0] in array and restriccion[1] in array):
 				return False
 		return True
 		
@@ -160,17 +159,18 @@ class Main:
 	Input: Array en el cual se añade la solucion
 	Return: Array con la solucion
 	"""
-	def backrackingSolution(self,array,n):
-		if(n==4):
-			if(array == self.answer):
-				print(array)
-				return array
+	def backtrackingSolution(self,array,n):
+		a = self.answer
+		if(array == self.answer):
+			return array
+		if(n == len(self.cards)):
+			return None
 		else:
-			keys = ['Sospechosos','Arma','Motivo','Lugar']
-			for c in range(len(self.cards[keys[n]])):
-				array[n]=self.cards[keys[n]][c]
+			keys = list(self.cards.keys())
+			for c in range(len(self.cards[keys[n]])):	#Recorre las cartas
+				array[n]=self.cards[keys[n]][c]				#Selecciona en la posicion n la carta.
 				if(self.comprobarRes(array)):
-					result = self.backrackingSolution(array,n+1)
+					result = self.backtrackingSolution(array,n+1)
 					if(result is not None):
 						return result
 main = Main(1)

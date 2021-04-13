@@ -33,9 +33,9 @@ class Application(tk.Frame):
 			tk.Button(self, text=answer[i], borderwidth=1, height=5, width=20).grid(row=2, column=i, padx=5)
 
 	def showRestrictions(self, restrictions):
-		tk.Label(self, text = "Restricciones").grid(row=0, column=4)
+		tk.Label(self, text = "Restricciones").grid(row=0, column=6)
 		restictionList = tkscrolled.ScrolledText(self, height=36, width=40)
-		restictionList.grid(row=1, column=4, rowspan=10)
+		restictionList.grid(row=1, column=6, rowspan=10)
 		for i in range(len(restrictions)):
 			restictionList.insert(tk.INSERT,str(restrictions[i]) + "\n")
 		restictionList.config(state=tk.DISABLED)
@@ -44,7 +44,7 @@ class Application(tk.Frame):
 		tk.Label(self, text="Solución (Algoritmo fuerza bruta)").grid(
 			row=3, column=0, columnspan=4, pady=20)
 
-		for i in range(4):
+		for i in range(5):
 			btn = tk.Button(self, borderwidth=1, height=5, width=20)
 			self.bfArray += [btn]
 
@@ -55,7 +55,7 @@ class Application(tk.Frame):
 		tk.Label(self, text="Solución (Backtracking)").grid(
 			row=5, column=0, columnspan=4, pady=20)
 
-		for i in range(4):
+		for i in range(5):
 			btn = tk.Button(self, borderwidth=1, height=5, width=20)
 			self.btArray += [btn]
 
@@ -81,8 +81,8 @@ class Application(tk.Frame):
 		self.btTime.grid(row=8, column=3)
 
 		#Output con los pasos del algoritmo
-		self.output = tkscrolled.ScrolledText(self, height=10, state="disable")
-		self.output.grid(row=10, column=0, columnspan=4)
+		self.output = tkscrolled.ScrolledText(self, height=10,  width=100, state="disable")
+		self.output.grid(row=10, column=0, columnspan=5 )
 		tk.Button(self, text="Iniciar", height=2, width=10, command= lambda:self.startTest(numRest.get(), numRep.get())).grid(row=11, column=0, columnspan=4)
 
 	def setBfTime(self, time):
@@ -92,16 +92,12 @@ class Application(tk.Frame):
 		self.btTime['text'] = time
 
 	def updateBfAnswer(self, arr):
-		self.bfArray[0]['text']  = arr[0]
-		self.bfArray[1]['text']  = arr[1]
-		self.bfArray[2]['text']  = arr[2]
-		self.bfArray[3]['text']  = arr[3]
+		for i in range(len(arr)):
+			self.bfArray[i]['text'] = arr[i]
 
 	def updateBtAnswer(self, arr):
-		self.btArray[0]['text']  = arr[0]
-		self.btArray[1]['text']  = arr[1]
-		self.btArray[2]['text']  = arr[2]
-		self.btArray[3]['text']  = arr[3]
+		for i in range(len(arr)):
+			self.btArray[i]['text']  = arr[i]
 		
 	def updateOutput(self, str):
 		self.output.config(state=tk.NORMAL)
