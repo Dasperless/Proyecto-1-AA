@@ -150,7 +150,7 @@ class Main:
 	"""					   						 
 	def comprobarRes(self,array):
 		for restriccion in self.restrictions:
-			if(restriccion[0] in array and restriccion[1] in array):
+			if(restriccion[0] in array and restriccion[1] in array and '' not in array):
 				return False
 		return True
 		
@@ -161,10 +161,9 @@ class Main:
 	"""
 	def backtrackingSolution(self,array,n):
 		a = self.answer
-		if(array == self.answer):
-			return array
-		if(n == len(self.cards)):
-			return None
+		if(n == 5):
+			if(array == self.answer):
+				return array
 		else:
 			keys = list(self.cards.keys())
 			for c in range(len(self.cards[keys[n]])):	#Recorre las cartas
@@ -173,4 +172,5 @@ class Main:
 					result = self.backtrackingSolution(array,n+1)
 					if(result is not None):
 						return result
+
 main = Main(1)
