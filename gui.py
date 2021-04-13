@@ -9,8 +9,10 @@ class Application(tk.Frame):
 	bfArray = []
 	btArray = []
 	output = None
+	restrictions = None
 	timeLabels = []
 	mainInst = None
+	answerLabels = []
 
 	def __init__(self, main, master=None):
 		super().__init__(master)
@@ -18,27 +20,40 @@ class Application(tk.Frame):
 		self.mainInst = main
 		self.master.resizable(0,0)
 		self.grid()
+		self.showAnswer()
+		self.showRestrictions()
 		self.showBrutalForceSolution()
 		self.showBacktrackinSolution()
 		self.testControls()
 
-	def showAnswer(self, answer):
+	def showAnswer(self):
 		tk.Label(self, text="Solución").grid(row=0, column=0, columnspan=4)
 
 		keys = list(self.mainInst.cards.keys())
 		for i in range(len(keys)):
 			tk.Label(self, text=keys[i], borderwidth=1).grid(row=1, column=i)
 
-		for i in range(len(answer)):
-			tk.Button(self, text=answer[i], borderwidth=1, height=5, width=20).grid(row=2, column=i, padx=5)
+		for i in range(len(keys)):
+			self.answerLabels += [tk.Button(self, borderwidth=1, height=5, width=20)]
+			self.answerLabels[i].grid(row=2, column=i, padx=5)
 
-	def showRestrictions(self, restrictions):
+	def updateAnswer(self, answer):
+		for i in range(len(answer)):
+			self.answerLabels[i]['text'] = answer[i]
+
+	def showRestrictions(self):
 		tk.Label(self, text = "Restricciones").grid(row=0, column=6)
-		restictionList = tkscrolled.ScrolledText(self, height=36, width=40)
-		restictionList.grid(row=1, column=6, rowspan=10)
+		self.restrictions = tkscrolled.ScrolledText(self, height=36, width=40)
+		self.restrictions.grid(row=1, column=6, rowspan=10)
+		self.restrictions.config(state=tk.DISABLED)
+
+
+	def updateRestrictions(self, restrictions):
+		self.restrictions.config(state=tk.NORMAL)
+		self.restrictions.delete(1.0,tk.END)
 		for i in range(len(restrictions)):
-			restictionList.insert(tk.INSERT,str(restrictions[i]) + "\n")
-		restictionList.config(state=tk.DISABLED)
+			self.restrictions.insert(tk.INSERT,str(restrictions[i]) + "\n")
+		self.restrictions.config(state=tk.DISABLED)
 
 	def showBrutalForceSolution(self):
 		tk.Label(self, text="Solución (Algoritmo fuerza bruta)").grid(

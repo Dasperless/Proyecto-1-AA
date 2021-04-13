@@ -35,8 +35,8 @@ class Main:
 			answer = self.answer				#lista con la respuesta	
 			self.setRestrictions(numRest)		#numero de restricciones
 			restrictions = self.restrictions	#obtiene la restricciones
-			self.app.showAnswer(answer)						#Actualiza las respuestas en la interfaz
-			self.app.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
+			self.app.updateAnswer(answer)						#Actualiza las respuestas en la interfaz
+			self.app.updateRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
 
 			#Se toma el tiempo del algoritmo de fuerza bruta.
 			startTimeBf = time.time_ns()
