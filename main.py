@@ -1,5 +1,5 @@
 import random
-import time
+from timeit import default_timer as timer
 import tkinter as tk
 from gui import Application
 
@@ -15,7 +15,6 @@ class Main:
 	btCombinations = []
 	bfTimeArr = []
 	btTimeArr = []
-	bfAnswer = []
 
 	def __init__(self, numRest):
 		self.setAnswer()
@@ -38,27 +37,27 @@ class Main:
 			self.app.showRestrictions(restrictions)			#Actualiza las restricciones en la interfaz
 
 			#Se toma el tiempo del algoritmo de fuerza bruta.
-			startTime = time.time()
+			startTimeBf = timer()
 			bruteForce = self.bruteForceSolution()
-			finalTime = time.time() - startTime
-			self.bfTimeArr += [finalTime]
+			finalTimeBf = timer() - startTimeBf
+			self.bfTimeArr += [finalTimeBf]
 
 			#Se toma el tiempo del algoritmo de backtracking.
-			startTime = time.time()
+			startTimeBt = timer()
 			backtracking = self.backrackingSolution(['','','',''],0)
-			finalTime = time.time() - startTime
-			self.btTimeArr += [finalTime]
+			finalTimeBt = timer() - startTimeBt
+			self.btTimeArr += [finalTimeBt]
 
 		#promedios
-		averge = self.average(self.bfTimeArr)
+		bfaverge = self.average(self.bfTimeArr)
 		btaverage = self.average(self.btTimeArr)
 
 		#actualiza el label de la respuesta.
 		self.app.updateBfAnswer(bruteForce)
-		self.app.updateBtAnswer(self.bfAnswer)
+		self.app.updateBtAnswer(backtracking)
 
 		#actualiza los promedios en interfaz 
-		self.app.setBfTime(averge)
+		self.app.setBfTime(bfaverge)
 		self.app.setBtTime(btaverage)	
 
 		self.createOutput() #Crea el output.
@@ -82,7 +81,6 @@ class Main:
 
 	def bruteForceSolution(self):
 		keys = list(self.cards.keys())
-		self.bfCombinations = []
 
 		for i in range(len(self.cards[keys[0]])):
 			res = []
@@ -93,18 +91,15 @@ class Main:
 						arma = self.cards[keys[1]][j]
 						motivo = self.cards[keys[2]][k]
 						lugar = self.cards[keys[3]][l]
-						res = [sospechoso, arma, motivo, lugar]
-						self.bfCombinations+=res
+						res = [sospechoso, arma, motivo, lugar]	
 						if(res == self.answer):
 							return res
 
 	def createOutput(self):
 		outputStr = "############## Algoritmo de Fuerza bruta ##############\n"
-		outputStr += "Cantidad de combinaciones: " + str(len(self.bfCombinations)) + "\n"
 		outputStr += str(self.bfTimeArr) + "\n\n"
 
 		outputStr += "############## Algoritmo de backtracking ##############\n"
-		outputStr += "Cantidad de combinaciones: " + str(len(self.btCombinations)) + "\n"
 		outputStr += str(self.btTimeArr) + "\n\n"
 
 		self.app.updateOutput(outputStr) 
@@ -168,13 +163,14 @@ class Main:
 	def backrackingSolution(self,array,n):
 		if(n==4):
 			if(array == self.answer):
-				self.btCombinations += array
 				print(array)
-				self.bfAnswer = array
+				return array
 		else:
 			keys = ['Sospechosos','Arma','Motivo','Lugar']
 			for c in range(len(self.cards[keys[n]])):
 				array[n]=self.cards[keys[n]][c]
 				if(self.comprobarRes(array)):
-					self.backrackingSolution(array,n+1)
+					result = self.backrackingSolution(array,n+1)
+					if(result is not None):
+						return result
 main = Main(1)
