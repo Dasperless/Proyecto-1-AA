@@ -29,7 +29,6 @@ class Main:
 	def startTest(self, numRest, numRep):
 		self.bfTimeArr = []
 		self.btTimeArr = []
-
 		for i in range(numRep):
 			self.setAnswer()					#setea la respuesta
 			answer = self.answer				#lista con la respuesta	
@@ -105,7 +104,7 @@ class Main:
 		outputStr += "Promedio: " + str(self.average(self.bfTimeArr)) +"\n\n"
 
 		outputStr += "############## Algoritmo de backtracking ##############\n"
-		outputStr += str(self.btTimeArr) + "\n" +  str(self.average(self.btTimeArr)) + "\n"
+		outputStr += str(self.btTimeArr) + "\n" 
 		outputStr += "Promedio: " + str(self.average(self.btTimeArr)) +"\n\n"
 		self.app.updateOutput(outputStr) 
 
@@ -151,7 +150,7 @@ class Main:
 	"""					   						 
 	def comprobarRes(self,array):
 		for restriccion in self.restrictions:
-			if(restriccion[0] in array and restriccion[1] in array and '' not in array):
+			if(restriccion[0] in array and restriccion[1] in array):
 				return False
 		return True
 		
@@ -164,6 +163,7 @@ class Main:
 		if(n == 5):						
 			if(array == self.answer):
 				return array
+
 		else:
 			keys = list(self.cards.keys())
 			for c in range(len(self.cards[keys[n]])):				#Recorre las cartas
